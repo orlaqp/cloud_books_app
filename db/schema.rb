@@ -10,11 +10,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100903194531) do
+ActiveRecord::Schema.define(:version => 20100906113339) do
 
   create_table "phone_numbers", :force => true do |t|
     t.string   "type"
     t.string   "number"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "users", :force => true do |t|
+    t.string   "firstname",  :limit => 50
+    t.string   "lastname",   :limit => 50
+    t.string   "username",   :limit => 25
+    t.string   "password",   :limit => 50
     t.datetime "created_at"
     t.datetime "updated_at"
   end

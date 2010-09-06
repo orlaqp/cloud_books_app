@@ -1,4 +1,6 @@
 CloudBooks::Application.routes.draw do
+  resources :users
+
   resources :phone_numbers
 
   # The priority is based upon order of creation:
