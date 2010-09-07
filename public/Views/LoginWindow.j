@@ -1,4 +1,5 @@
 @import <AppKit/CPWindowController.j> 
+@import "../Models/User.j";
 
 @implementation LoginWindow : CPWindowController
 {
@@ -9,6 +10,7 @@
 	CPTextField _txtPassword;
 	CPButton	_loginButton;
 	CPButton	_quitButton;
+	CPTextField _lblMessage;
 }
 
 - (id)initWithContentView:(CPView) aView
@@ -18,7 +20,7 @@
     var windowWidth = 340.0;
     var windowHeight = 160.0;
 
-    _theWindow = [[CPWindow alloc] initWithContentRect:CGRectMake(0, 0, windowWidth, windowHeight) styleMask: CPHUDBackgroundWindowMask],
+    _theWindow = [[CPWindow alloc] initWithContentRect:CGRectMake(0, 0, windowWidth, windowHeight) styleMask: CPHUDBackgroundWindowMask ],
         panelContentView = [_theWindow contentView];
 
     [_theWindow setFrameOrigin:CGPointMake((CGRectGetWidth([aView bounds]) - windowWidth) / 2.0,
@@ -73,6 +75,7 @@
             //[lblRememberLogin setStringValue:@"Remember me"];
             //[panelContentView addSubview:lblRememberLogin];
 
+			// Login Button
             _loginButton = [[CPButton alloc] initWithFrame: CGRectMake(225.0, 111, 70.0, 24.0)];
             [_loginButton setAutoresizingMask:CPViewMinXMargin | CPViewMaxXMargin | CPViewMinYMargin | CPViewMaxYMargin];
             [_loginButton setTitle:"Login"];
@@ -80,12 +83,22 @@
             [_loginButton setAction:@selector(login:)];
             [panelContentView addSubview:_loginButton];
 
+			// Quit Button
             _quitButton = [[CPButton alloc] initWithFrame: CGRectMake(130.0, 111, 70.0, 24.0)];
             [_quitButton setAutoresizingMask:CPViewMinXMargin | CPViewMaxXMargin | CPViewMinYMargin | CPViewMaxYMargin];
             [_quitButton setTitle:"Quit"];
             [_quitButton setTarget:self];
             [_quitButton setAction:@selector(quit:)];
+            //[_quitButton setEnabled:NO];
             [panelContentView addSubview:_quitButton];
+
+			// Error Message
+            _lblMessage = [[CPTextField alloc] initWithFrame:CGRectMake(25.0, 87.5, 300.0, 20.0)];
+            [_lblMessage setTextColor:[CPColor redColor]];
+            [panelContentView addSubview:_lblMessage];
+
+			// Set default button
+			[_theWindow setDefaultButton:_loginButton];
 
     }	
     return self;
@@ -93,42 +106,30 @@
 
 - (void)login:(id)sender 
 {
-    //[theWindow close];
-
-    console.log("Login button was pressed");
-
-	/*
-    var request = [CPURLRequest requestWithURL:"http://localhost:3000/user/login?username=" + [txtUsername stringValue]];
-    var response;
-    var error;
-
-    //debugger;
-
-    // For now response and error are not used
-    var data = [CPURLConnection sendSynchronousRequest:request returningResponse:response error:error];
-    if (data != nil)
-    {
-            //console.log("everything went well");
-
-            var text = [data string];
-            console.log([data string]);
-            //CPLog.trace(text);
-
-            if ([text hasPrefix:"Welcome"])
-            {
-                [[CPNotificationCenter defaultCenter] postNotificationName:@"UserLoginResult" object:@"YES"] ;
-                [theWindow close];
-            }
-            else
-            {
-                [[CPNotificationCenter defaultCenter] postNotificationName:@"UserLoginResult" object:@"NO"] ;
-            }
-    }
-    else
-    {
-            [[CPNotificationCenter defaultCenter] postNotificationName:@"UserLoginResult" object:@"ERROR"] ;
-    }
-	*/
+	[_lblMessage setStringValue:@""]
+	
+	// Validate that both username and password have values before go to the server
+	if ([_txtUsername stringValue] == "" || [_txtPassword stringValue] == "")
+	{
+		[_lblMessage setStringValue:@"Make sure you entered username and password"];
+		return;
+	}
+	
+	var user = [User findWithParams:{"username":[_txtUsername stringValue], "password":[_txtPassword stringValue]}];
+	if (user == null)
+	{
+		// Clear Password Field
+		[_txtPassword setStringValue:@""]
+		
+		// Show message to the user
+		[_lblMessage setStringValue:@"Username, Password combination not found"]
+		
+	}
+	else 
+	{
+		[[CPNotificationCenter defaultCenter] postNotificationName:@"UserLoginSuccesfully" object:user] ;
+	}
+	
 }
 
 - (void) quit:(id) sender

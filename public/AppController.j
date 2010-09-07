@@ -20,7 +20,7 @@
     var theWindow = [[CPWindow alloc] initWithContentRect:CGRectMakeZero() styleMask:CPBorderlessBridgeWindowMask],
         contentView = [theWindow contentView];
 
-	[contentView setBackgroundColor:[CPColor blackColor]];
+	[contentView setBackgroundColor:[CPColor lightGrayColor]];
 
     var label = [[CPTextField alloc] initWithFrame:CGRectMakeZero()];
 

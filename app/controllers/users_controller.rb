@@ -5,8 +5,13 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.xml
   def index
-    @users = User.all
-
+    
+    if params[:username] && params[:password]
+      @users = User.authenticate(params[:username], params[:password])
+    else
+      @users= User.all
+    end
+    
     respond_with(@users)
     
   end
