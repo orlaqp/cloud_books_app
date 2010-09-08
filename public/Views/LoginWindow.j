@@ -106,6 +106,8 @@
 
 - (void)login:(id)sender 
 {
+	//alert([[CPApplication sharedApplication] windows].length);
+	
 	[_lblMessage setStringValue:@""]
 	
 	// Validate that both username and password have values before go to the server
@@ -114,27 +116,27 @@
 		[_lblMessage setStringValue:@"Make sure you entered username and password"];
 		return;
 	}
-	
+	// Retrieve User information based on username and password from the web service
 	var user = [User findWithParams:{"username":[_txtUsername stringValue], "password":[_txtPassword stringValue]}];
 	if (user == null)
 	{
 		// Clear Password Field
-		[_txtPassword setStringValue:@""]
-		
+		[_txtPassword setStringValue:@""];		
 		// Show message to the user
-		[_lblMessage setStringValue:@"Username, Password combination not found"]
-		
+		[_lblMessage setStringValue:@"Username, Password combination not found"];		
 	}
 	else 
 	{
-		[[CPNotificationCenter defaultCenter] postNotificationName:@"UserLoginSuccesfully" object:user] ;
-	}
-	
+		[[CPNotificationCenter defaultCenter] postNotificationName:@"UserLoginResult" object:user];
+		[self close];
+	}	
 }
 
 - (void) quit:(id) sender
 {
-    [[CPNotificationCenter defaultCenter] postNotificationName:@"UserLoginResult" object:@"NO"] ;
+	[self close];
+	[[CPNotificationCenter defaultCenter] postNotificationName:@"UserLoginResult" object:nil];
+	
 }
 
 @end
