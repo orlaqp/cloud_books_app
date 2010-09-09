@@ -22,6 +22,8 @@
     _theWindow = [[CPWindow alloc] initWithContentRect:CGRectMakeZero() styleMask:CPBorderlessBridgeWindowMask],
         _contentView = [_theWindow contentView];
 
+	CPLogRegister(CPLogPopup);
+
 	[_contentView setBackgroundColor:[CPColor lightGrayColor]];
 	[_theWindow orderFront:self];
 	[self startListening:self];
@@ -54,7 +56,7 @@
 	if (user == null) {
 		var label = [[CPTextField alloc] initWithFrame:CGRectMakeZero()];
 
-	    [label setStringValue:@"System session terminated"];
+	    [label setStringValue:@"System's session has been terminated"];
 	    [label setFont:[CPFont boldSystemFontOfSize:24.0]];
 
 	    [label sizeToFit];

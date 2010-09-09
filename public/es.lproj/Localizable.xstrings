@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>EnterPasswordWaterMark</key>
+	<string>Entre contrasena</string>
+	<key>EnterUsernameWaterMark</key>
+	<string>Entre usuario</string>
+	<key>LoginButtonText</key>
+	<string>Entrar</string>
+	<key>LoginHeader</key>
+	<string>Ventana de Credenciales</string>
+	<key>Password</key>
+	<string>Contrasena</string>
+	<key>QuitButtonText</key>
+	<string>Salir</string>
+	<key>Username</key>
+	<string>Usuario</string>
+	<key>MakeSureEnterUsernamePassword</key>
+	<string>Asegurese de entrar nombre de usuario y contrasena</string>
+	<key>UsernamePasswordFailed</key>
+	<string>Nombre de usario o contrasena incorrecto(s)</string>
+</dict>
+</plist>
