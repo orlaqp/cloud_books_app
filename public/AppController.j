@@ -7,6 +7,7 @@
  */
 
 @import <Foundation/CPObject.j>
+@import "CPLightbox.j"
 @import "Models/User.j"
 @import "Views/LoginWindow.j"
 
@@ -23,6 +24,16 @@
         _contentView = [_theWindow contentView];
 
 	CPLogRegister(CPLogPopup);
+	
+	/*
+	// Login Button
+    _loginButton = [[CPButton alloc] initWithFrame: CGRectMake(225.0, 111, 70.0, 24.0)];
+    [_loginButton setAutoresizingMask:CPViewMinXMargin | CPViewMaxXMargin | CPViewMinYMargin | CPViewMaxYMargin];
+    [_loginButton setTitle:CPLocalizedString("LoginButtonText","Login button Text")];
+    [_loginButton setTarget:self];
+    [_loginButton setAction:@selector(login:)];
+    [_contentView addSubview:_loginButton];
+    */
 
 	[_contentView setBackgroundColor:[CPColor lightGrayColor]];
 	[_theWindow orderFront:self];
@@ -34,10 +45,17 @@
     //[CPMenu setMenuBarVisible:YES];
 }
 
+- (void)login:(id)sender
+{
+	[self askForLoginCredentials:_contentView];
+}
+
 - (void)askForLoginCredentials:(CPView)aView
 {
 	var login = [[LoginWindow alloc] initWithContentView:aView];    
-	[CPApp runModalForWindow:[login window]];
+	//[CPApp runModalForWindow:[login window]];
+	
+	[[CPLightbox sharedLightbox] runModalForWindow:[login window]];
 }
 
 -(void)startListening:(id)sender
@@ -67,7 +85,14 @@
 	    [_contentView addSubview:label];
 		
 	} else {
-		[CPApp abortModal];
+		// Show main menu
+		var mainMenu = [MainMenuController initMenuForUser:@"user"];
+		[mainMenu populateMenuOptions];
+		
+		CPLog.debug(@"Showing menu bar");
+		
+		[CPMenu setMenuBarVisible:YES];
+		
 	}
 }
 

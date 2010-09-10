@@ -1,5 +1,6 @@
 @import <AppKit/CPWindowController.j> 
 @import "../Models/User.j";
+@import "../Controllers/MainMenuController.j";
 
 @implementation LoginWindow : CPWindowController
 {
@@ -140,14 +141,14 @@
 	}
 	else 
 	{
-		[[CPNotificationCenter defaultCenter] postNotificationName:@"UserLoginResult" object:user];
-		[self close];
+		[[CPLightbox sharedLightbox] stopModal];
+		[[CPNotificationCenter defaultCenter] postNotificationName:@"UserLoginResult" object:user];		
 	}	
 }
 
 - (void) quit:(id) sender
 {
-	[self close];
+	[[CPLightbox sharedLightbox] stopModal];	
 	[[CPNotificationCenter defaultCenter] postNotificationName:@"UserLoginResult" object:nil];
 	
 }
