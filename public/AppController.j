@@ -23,26 +23,13 @@
     _theWindow = [[CPWindow alloc] initWithContentRect:CGRectMakeZero() styleMask:CPBorderlessBridgeWindowMask],
         _contentView = [_theWindow contentView];
 
-	CPLogRegister(CPLogPopup);
-	
-	/*
-	// Login Button
-    _loginButton = [[CPButton alloc] initWithFrame: CGRectMake(225.0, 111, 70.0, 24.0)];
-    [_loginButton setAutoresizingMask:CPViewMinXMargin | CPViewMaxXMargin | CPViewMinYMargin | CPViewMaxYMargin];
-    [_loginButton setTitle:CPLocalizedString("LoginButtonText","Login button Text")];
-    [_loginButton setTarget:self];
-    [_loginButton setAction:@selector(login:)];
-    [_contentView addSubview:_loginButton];
-    */
+	//CPLogRegister(CPLogPopup);
 
-	[_contentView setBackgroundColor:[CPColor lightGrayColor]];
+	[_contentView setBackgroundColor:[CPColor colorWithCalibratedRed:209.0/255.0 green:216.0/255.0 blue:227.0/255.0 alpha:0.7]];
 	[_theWindow orderFront:self];
 	[self startListening:self];
 	
 	[self askForLoginCredentials:_contentView];
-    
-    // Uncomment the following line to turn on the standard menu bar.
-    //[CPMenu setMenuBarVisible:YES];
 }
 
 - (void)login:(id)sender
@@ -88,11 +75,7 @@
 		// Show main menu
 		var mainMenu = [MainMenuController initMenuForUser:@"user"];
 		[mainMenu populateMenuOptions];
-		
 		CPLog.debug(@"Showing menu bar");
-		
-		[CPMenu setMenuBarVisible:YES];
-		
 	}
 }
 
