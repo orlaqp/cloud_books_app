@@ -3,8 +3,8 @@ Cloud Books
 
 For some time now I have been trying to create an Accounting system for the cloud. I wanted the look and feel of a desktop app though that is why I decided to use Cappuccino, I think it is a great Open Source Product.  I would like to create a product similar to Quickbooks but for the cloud and completely open source. I believe in the open source community. I know there are a lot talent people out there who wants to contribute and share their knowledge with other people. 
 
-I would like to make the system server side agnostic. For now I'm using Ruby on Rails 3 for the backend because I think it is another Great framework for I'm using it only to implement a RESTful web service that could be ported to any other server side language/framework. I would like to make the system localizable and everything I have code so far it is like that.
+I would like to make the system server side agnostic. For now I'm using Ruby on Rails 3 for the backend because I think it is another Great framework. I'm using it only to implement a RESTful web service that could be ported to any other server side language/framework. I would like to make the system localizable.
 
-My original language is not English so I apologize for any typo or grammatical errors. I really excited about this project and if you want to participate send me an email to orlaqp@binaryways.com.
+My original language is not English so I apologize for any typo or grammatical errors. I'm really excited about this project and if you want to participate send me an email to orlaqp@binaryways.com.
 
 
