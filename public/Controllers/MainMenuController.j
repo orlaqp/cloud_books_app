@@ -128,8 +128,8 @@
 // Action Selectors
 - (void)backup:(CPMenuItem)sender
 {
-	var itemsWindow = [[AccountsWindow alloc] initWithContentView:_mainView];  
-	[itemsWindow showWindow:self];	
+	var itemsWindow = [[AccountsWindow alloc] initWithContentView:_mainView];
+	[itemsWindow openWindow:self reuseWindow:YES];
 }
 
 - (void)logoff:(CPMenuItem)sender
@@ -139,8 +139,8 @@
 
 - (void)accountList:(CPMenuItem)sender
 {	
-	var accountsWindow = [[AccountsWindow alloc] initWithContentView:_mainView];  
-	[accountsWindow showWindow:self];
+	 var accountsWindow = [[AccountsWindow alloc] initWithContentView:_mainView];  
+	[accountsWindow openWindow:self reuseWindow:YES];	
 }
 
 
