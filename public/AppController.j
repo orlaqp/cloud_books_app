@@ -14,8 +14,9 @@
 
 @implementation AppController : CPObject
 {
-	CPWindow _theWindow;
-	CPView _contentView;
+	CPWindow 			_theWindow;
+	CPView 				_contentView;
+	MainMenuController 	_mainMenu;
 }
 
 - (void)applicationDidFinishLaunching:(CPNotification)aNotification
@@ -32,10 +33,12 @@
 	[self askForLoginCredentials:_contentView];
 }
 
+/*
 - (void)login:(id)sender
 {
 	[self askForLoginCredentials:_contentView];
 }
+*/
 
 - (void)askForLoginCredentials:(CPView)aView
 {
@@ -73,8 +76,8 @@
 		
 	} else {
 		// Show main menu
-		var mainMenu = [MainMenuController initMenuForUser:@"user"];
-		[mainMenu populateMenuOptions];
+		_mainMenu = [[MainMenuController alloc] initMenuForUser:@"user" andView:_contentView];
+		[_mainMenu populateMenuOptions];
 		CPLog.debug(@"Showing menu bar");
 	}
 }

@@ -4,15 +4,15 @@
 
 @implementation LoginWindow : CPWindowController
 {
-	CPWindow 	_theWindow;
-	CPTextField _lblUsername;
-	CPTextField _lblPassword;
-	CPTextField _txtUsername,
-	CPTextField _txtPassword;
-	CPButton	_loginButton;
-	CPButton	_quitButton;
-	CPTextField _lblMessage;
-	CPPopUpButton _languagesPopup;
+	CPWindow 		_theWindow;
+	CPTextField 	_lblUsername;
+	CPTextField 	_lblPassword;
+	CPTextField 	_txtUsername,
+	CPTextField 	_txtPassword;
+	CPButton		_loginButton;
+	CPButton		_quitButton;
+	CPTextField 	_lblMessage;
+	CPPopUpButton 	_languagesPopup;
 }
 
 - (id)initWithContentView:(CPView) aView

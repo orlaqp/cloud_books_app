@@ -1,24 +1,26 @@
 @import <Foundation/CPObject.j>
 
 @import "../Models/MenuItem.j"
+@import "../Views/AccountsWindow.j"
 
 @implementation MainMenuController : CPObject
 {
-	CPString _username;
-	MenuItem mainMenu		@accessors;
+	CPView 		_mainView;
+	CPString 	_username;
+	MenuItem 	mainMenu		@accessors;
 	
 }
 
-+ (id)initMenuForUser:(CPString)username
+- (id)initMenuForUser:(CPString)username andView:(CPView)aView
 {
 	CPLog.debug("Creating Main Menu for user: " + username);
 	
-	self = [[super alloc] init];
+	self = [super init];
 	if (self)
 	{
+		_mainView = aView;
 		_username = username;		
 	}
-	
 	return self;
 }
 
@@ -126,7 +128,8 @@
 // Action Selectors
 - (void)backup:(CPMenuItem)sender
 {
-	alert("backing up");	
+	var itemsWindow = [[AccountsWindow alloc] initWithContentView:_mainView];  
+	[itemsWindow showWindow:self];	
 }
 
 - (void)logoff:(CPMenuItem)sender
@@ -134,9 +137,10 @@
 	alert("loggin off");
 }
 
-- (void)zoomIn:(CPMenuItem)sender
-{
-	alert("zoom in");
+- (void)accountList:(CPMenuItem)sender
+{	
+	var accountsWindow = [[AccountsWindow alloc] initWithContentView:_mainView];  
+	[accountsWindow showWindow:self];
 }
 
 
