@@ -118,12 +118,92 @@ tableTestDragType = @"CPTableViewTestDragType";
 	CPLog.debug(@"changing! %@", [aNotification description]);
 }
 
+- (void)tableViewSelectionDidChange:(CPNotification)aNotification
+{
+	CPLog.debug(@"did change! %@", [aNotification description]);
+}
+
 - (BOOL)tableView:(CPTableView)aTableView shouldEditTableColumn:(CPTableColumn)tableColumn row:(int)row
 {
+    // if(aTableView === tableView)
+    return YES;
+    // else
+    //    return NO;
+}
+- (BOOL)tableView:(CPTableView)aTableView writeRowsWithIndexes:(CPIndexSet)rowIndexes toPasteboard:(CPPasteboard)pboard
+{
+    // if (aTableView === tableView3)
+    //    return NO;
+
+    var data = [rowIndexes, [aTableView UID]];
+    
+    var encodedData = [CPKeyedArchiver archivedDataWithRootObject:data];
+    [pboard declareTypes:[CPArray arrayWithObject:tableTestDragType] owner:self];
+    [pboard setData:encodedData forType:tableTestDragType];
+    
+    return YES;
+}
+
+- (CPDragOperation)tableView:(CPTableView)aTableView 
+                   validateDrop:(id)info 
+                   proposedRow:(CPInteger)row 
+                   proposedDropOperation:(CPTableViewDropOperation)operation
+{
+
+    [[aTableView window] orderFront:nil];
+
     if(aTableView === tableView)
-        return YES;
-    else
-        return NO;
+        [aTableView setDropRow:row dropOperation:CPTableViewDropOn];
+    else 
+        [aTableView setDropRow:row dropOperation:CPTableViewDropAbove];
+        
+    return CPDragOperationMove;
+}
+
+- (BOOL)tableView:(CPTableView)aTableView acceptDrop:(id)info row:(int)row dropOperation:(CPTableViewDropOperation)operation
+{    
+    var pboard = [info draggingPasteboard],
+        rowData = [pboard dataForType:tableTestDragType],
+        tables = [tableView, tableView],
+        dataSets = [dataSet1, dataSet1];   
+    
+    rowData = [CPKeyedUnarchiver unarchiveObjectWithData:rowData];
+    
+    var sourceIndexes = rowData[0],
+        sourceTableUID = rowData[1];
+     
+    var index = (aTableView == tableView) ? 1 : 0;
+        
+    var destinationTable = tables[1 - index],
+        sourceTable = tables[index],
+        destinationDataSet = dataSets[1 - index],
+        sourceDataSet = dataSets[index];
+
+    if(operation | CPDragOperationMove)
+    {
+        if (sourceTableUID == [aTableView UID])
+        {
+            [destinationDataSet moveIndexes:sourceIndexes toIndex:row];
+            [destinationTable reloadData];
+            var destIndexes = [CPIndexSet indexSetWithIndexesInRange:CPMakeRange(row, [sourceIndexes count])];
+            [destinationTable selectRowIndexes:destIndexes byExtendingSelection:NO];            
+        }
+        else
+        {
+            var destIndexes = [CPIndexSet indexSetWithIndexesInRange:CPMakeRange(row, [sourceIndexes count])];
+            var sourceObjects = [sourceDataSet objectsAtIndexes:sourceIndexes];
+
+            [destinationDataSet insertObjects:sourceObjects atIndexes:destIndexes];
+            [destinationTable reloadData];
+            [destinationTable selectRowIndexes:destIndexes byExtendingSelection:NO];
+            
+            [sourceDataSet removeObjectsAtIndexes:sourceIndexes];
+            [sourceTable reloadData];
+            [sourceTable selectRowIndexes:[CPIndexSet indexSet] byExtendingSelection:NO];                
+        }
+    }
+        
+    return YES;
 }
 
 @end

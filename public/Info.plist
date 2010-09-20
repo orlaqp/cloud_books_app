@@ -5,7 +5,7 @@
 	<key>CPApplicationDelegateClass</key>
 	<string>AppController</string>
 	<key>CPBundleLocale</key>
-	<string>en</string>
+	<string>es</string>
 	<key>CPBundleName</key>
 	<string>cloud_book</string>
 	<key>CPPrincipalClass</key>

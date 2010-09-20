@@ -24,28 +24,23 @@
     _theWindow = [[CPWindow alloc] initWithContentRect:CGRectMakeZero() styleMask:CPBorderlessBridgeWindowMask],
         _contentView = [_theWindow contentView];
 
-	//CPLogRegister(CPLogPopup);
+	CPLogRegister(CPLogPopup);
 
 	[_contentView setBackgroundColor:[CPColor colorWithCalibratedRed:209.0/255.0 green:216.0/255.0 blue:227.0/255.0 alpha:0.7]];
 	[_theWindow orderFront:self];
 	[self startListening:self];
 	
 	[self askForLoginCredentials:_contentView];
+	// _mainMenu = [[MainMenuController alloc] initMenuForUser:@"user" andView:_contentView];
+	// [_mainMenu populateMenuOptions];
 }
-
-/*
-- (void)login:(id)sender
-{
-	[self askForLoginCredentials:_contentView];
-}
-*/
 
 - (void)askForLoginCredentials:(CPView)aView
 {
 	var login = [[LoginWindow alloc] initWithContentView:aView];    
 	//[CPApp runModalForWindow:[login window]];
 	
-	[[CPLightbox sharedLightbox] runModalForWindow:[login window]];
+	[[CPLightbox sharedLightbox] runSheetForWindow:[login window]];
 }
 
 -(void)startListening:(id)sender
