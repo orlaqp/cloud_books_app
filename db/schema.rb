@@ -10,7 +10,64 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100920204315) do
+ActiveRecord::Schema.define(:version => 20100921153623) do
+
+  create_table "address_types", :force => true do |t|
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "addresses", :force => true do |t|
+    t.integer  "address_type_id"
+    t.string   "street",          :limit => 250
+    t.string   "city",            :limit => 100
+    t.string   "state",           :limit => 100
+    t.string   "zip_code",        :limit => 15
+    t.integer  "country_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "addresses_contacts", :id => false, :force => true do |t|
+    t.integer "address_id"
+    t.integer "contact_id"
+  end
+
+  create_table "contacts", :force => true do |t|
+    t.string   "title",      :limit => 5
+    t.string   "first_name", :limit => 50
+    t.string   "middle",     :limit => 50
+    t.string   "last_name",  :limit => 50
+    t.string   "suffix",     :limit => 15
+    t.string   "job_title",  :limit => 100
+    t.string   "company",    :limit => 100
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "contacts_internet_infos", :id => false, :force => true do |t|
+    t.integer "contact_id"
+    t.integer "internet_info_id"
+  end
+
+  create_table "contacts_phone_numbers", :id => false, :force => true do |t|
+    t.integer "contact_id"
+    t.integer "phone_number_id"
+  end
+
+  create_table "internet_info_types", :force => true do |t|
+    t.string   "description", :limit => 100
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "internet_infos", :force => true do |t|
+    t.integer  "internet_info_type_id"
+    t.string   "description",           :limit => 150
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "phone_number_types", :force => true do |t|
     t.string   "name"
