@@ -7,6 +7,7 @@ tableTestDragType = @"CPTableViewTestDragType";
 	 CPTableView 	tableView;
     CPImage     		iconImage;
     CPArray     		dataSet1;    
+	CPSplitView 	verticalSplitter;
 }
 
 - (id)initWithContentView:(CPView)aView
@@ -27,12 +28,33 @@ tableTestDragType = @"CPTableViewTestDragType";
 
     if (self)
 	{
-		[self createAccountsTableView];		
+		//[self createAccountsTableView];		
+		[self createSplitter];
 	}	
 	return self;	
 }
 
-- (void)createAccountsTableView
+- (void)createSplitter
+{
+	verticalSplitter = [[CPSplitView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth([_theContentView bounds]), CGRectGetHeight([_theContentView bounds]))];
+	[verticalSplitter setDelegate:self];
+	[verticalSplitter setVertical:YES]; 
+	[verticalSplitter setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable ]; 
+	[verticalSplitter setIsPaneSplitter:YES];
+	[_theContentView addSubview:verticalSplitter];
+	
+	var leftView = [[CPView alloc] initWithFrame:CGRectMake(0, 0, 200, CGRectGetHeight([verticalSplitter bounds]))];
+	[leftView setAutoresizingMask:CPViewHeightSizable ]; 
+	var rightView = [[CPView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth([verticalSplitter bounds]) - 200, CGRectGetHeight([verticalSplitter bounds]))];
+	[rightView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable ]; 
+
+	[verticalSplitter addSubview:leftView];
+	[verticalSplitter addSubview:rightView];
+	
+	[self showContactsGrid: leftView];
+}
+
+- (void)showContactsGrid:(CPView)aView
 {
 
 	dataSet1 = []
@@ -42,7 +64,7 @@ tableTestDragType = @"CPTableViewTestDragType";
         dataSet1[i - 1] = [CPNumber numberWithInt:i];       
     }
 
-	tableView = [[CPTableView alloc] initWithFrame:CGRectMake(0.0, 0.0, 500.0, 500.0)];
+	tableView = [[CPTableView alloc] initWithFrame:CGRectMake(0.0, 0.0, 100.0, 100.0)];
 
     [tableView setAllowsMultipleSelection:YES];
     [tableView setAllowsColumnSelection:YES];
@@ -66,28 +88,42 @@ tableTestDragType = @"CPTableViewTestDragType";
     iconImage = [[CPImage alloc] initWithContentsOfFile:"http://cappuccino.org/images/favicon.png" size:CGSizeMake(16,16)];
 	
 	 var desc = [CPSortDescriptor sortDescriptorWithKey:@"self" ascending:YES];
+	 
+	 var nameColumn = [[CPTableColumn alloc] initWithIdentifier:@"Contact_Name"];
+	[nameColumn setSortDescriptorPrototype:desc];
+	[[nameColumn headerView] setStringValue:@"Contact Name"];
+
+	[nameColumn setMinWidth:10.0];
+	[nameColumn setMaxWidth:200.0];
+	[nameColumn setWidth:150.0];
+	
+	[nameColumn setEditable:YES];
+	[tableView addTableColumn:nameColumn];
+	
+	/*
     for (var i = 1; i <= 2; i++)
     {
         var column = [[CPTableColumn alloc] initWithIdentifier:String(i)];
         [column setSortDescriptorPrototype:desc];
         [[column headerView] setStringValue:"Number " + i];
 
-        [column setMinWidth:50.0];
-        [column setMaxWidth:500.0];
-        [column setWidth:200.0];
+        [column setMinWidth:10.0];
+        [column setMaxWidth:110.0];
+        [column setWidth:100.0];
         
         [column setEditable:YES];
         [tableView addTableColumn:column];
     }
+	*/
 
-    var scrollView = [[CPScrollView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth([_theContentView bounds]), CGRectGetHeight([_theContentView bounds]))];
+    var scrollView = [[CPScrollView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth([aView bounds]), CGRectGetHeight([aView bounds]))];
    
     [scrollView setDocumentView:tableView];
     [scrollView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
     
-    [_theContentView addSubview:scrollView];
+    [aView addSubview:scrollView];
 
-    [_theWindow orderFront:self];
+    //[_theWindow orderFront:self];
 }
 
 - (int)numberOfRowsInTableView:(CPTableView)atableView

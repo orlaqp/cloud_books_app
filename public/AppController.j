@@ -30,9 +30,9 @@
 	[_theWindow orderFront:self];
 	[self startListening:self];
 	
-	[self askForLoginCredentials:_contentView];
-	// _mainMenu = [[MainMenuController alloc] initMenuForUser:@"user" andView:_contentView];
-	// [_mainMenu populateMenuOptions];
+	//[self askForLoginCredentials:_contentView];
+	 _mainMenu = [[MainMenuController alloc] initMenuForUser:@"user" andView:_contentView];
+	[_mainMenu populateMenuOptions];
 }
 
 - (void)askForLoginCredentials:(CPView)aView
@@ -40,7 +40,7 @@
 	var login = [[LoginWindow alloc] initWithContentView:aView];    
 	//[CPApp runModalForWindow:[login window]];
 	
-	[[CPLightbox sharedLightbox] runSheetForWindow:[login window]];
+	[[CPLightbox sharedLightbox] runModalForWindow:[login window]];
 }
 
 -(void)startListening:(id)sender
