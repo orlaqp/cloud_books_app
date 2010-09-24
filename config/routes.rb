@@ -1,5 +1,6 @@
 CloudBooks::Application.routes.draw do
   resources :users
+  resources :contacts
 
   resources :phone_numbers
 

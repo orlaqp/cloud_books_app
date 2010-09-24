@@ -2,6 +2,7 @@
 
 @import "../Models/MenuItem.j"
 @import "../Views/AccountsWindow.j"
+@import "../Views/AddressBook.j"
 
 @implementation MainMenuController : CPObject
 {
@@ -41,6 +42,7 @@
 	// List Menu
 	var listMenu = [[CPMenu alloc] initWithTitle:CPLocalizedString(@"Lists",@"Lists")],
     	listMenuItem = [[CPMenuItem alloc] initWithTitle:CPLocalizedString(@"Lists",@"Lists") action:nil keyEquivalent:nil];
+	[listMenu addItem:[[CPMenuItem alloc] initWithTitle:CPLocalizedString(@"Address Book",@"Address Book")  action:@selector(addressBook:)  keyEquivalent:@"B"]];
 	[listMenu addItem:[[CPMenuItem alloc] initWithTitle:CPLocalizedString(@"Accounts",@"Accounts")  action:@selector(accountList:)  keyEquivalent:@"A"]];
 	[listMenu addItem:[[CPMenuItem alloc] initWithTitle:CPLocalizedString(@"Items",@"Items") action:@selector(itemList:) keyEquivalent:@"T"]];
 	[listMenu addItem:[[CPMenuItem alloc] initWithTitle:CPLocalizedString(@"Customers",@"Customers") action:@selector(customerList:) keyEquivalent:@"C"]];
@@ -135,6 +137,12 @@
 - (void)logoff:(CPMenuItem)sender
 {
 	alert("loggin off");
+}
+
+- (void)addressBook:(CPMenuItem)sender
+{	
+	 var addressBookWindow = [[AddressBook alloc] initWithContentView:_mainView];  
+	[addressBookWindow openWindow:self reuseWindow:YES];	
 }
 
 - (void)accountList:(CPMenuItem)sender

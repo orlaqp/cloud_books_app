@@ -2,7 +2,7 @@
 
 @implementation User : CappuccinoResource
 {
-	CPString firstname		@accessors;
+	CPString firstname	@accessors;
 	CPString lastname		@accessors;
 	CPString username		@accessors;
 	CPString password		@accessors;
