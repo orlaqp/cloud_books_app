@@ -24,7 +24,7 @@
     _theWindow = [[CPWindow alloc] initWithContentRect:CGRectMakeZero() styleMask:CPBorderlessBridgeWindowMask],
         _contentView = [_theWindow contentView];
 
-	CPLogRegister(CPLogPopup);
+	//CPLogRegister(CPLogPopup);
 
 	[_contentView setBackgroundColor:[CPColor colorWithCalibratedRed:209.0/255.0 green:216.0/255.0 blue:227.0/255.0 alpha:0.7]];
 	[_theWindow orderFront:self];

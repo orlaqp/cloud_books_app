@@ -5,11 +5,11 @@ tableTestDragType = @"CPTableViewTestDragType";
 
 @implementation AddressBook : WindowBase
 {
-	CPSearchField searchField;
-	CPTableView 	tableView;
+	CPSearchField       searchField;
+	CPTableView 	    tableView;
     CPImage     		iconImage;
     CPArray     		dataSet1;    
-	CPSplitView 	verticalSplitter;	
+	CPSplitView 	    verticalSplitter;	
 	CPView				searchFieldContainer;
 	CPView				splitterContainer;
 }
@@ -36,7 +36,7 @@ tableTestDragType = @"CPTableViewTestDragType";
 		[self loadContacts:@""];
 		
 		// Create Splitter View
-		[self createLayout];
+		[self createLayout:_theContentView];
 	}	
 	return self;	
 }
@@ -46,22 +46,35 @@ tableTestDragType = @"CPTableViewTestDragType";
 	var contacts = [Contact all];
 }
 
-- (void)createLayout
+- (void)createLayout:(CPView)aView
 {
 	// Containers
 	searchFieldContainer = [[CPView alloc] initWithFrame:CPMakeRect(0,0,CGRectGetWidth([aView bounds]), 40)];
 	[searchFieldContainer setAutoresizingMask:CPViewWidthSizable];
-	[searchFieldContainer setBackgroundColor:[]CPColor redColor];
-	[aView addSubview: searchFieldContainer];	
+	[searchFieldContainer setBackgroundColor:[CPColor colorWithCalibratedRed:219.0/255.0 green:220.0/255.0 blue:220.0/255.0 alpha:0.7]];
+	[aView addSubview:searchFieldContainer];	
 	
 	splitterContainer = [[CPView alloc] initWithFrame:CPMakeRect(0,40,CGRectGetWidth([aView bounds]), CGRectGetHeight([aView bounds]) - 40)];
-	[splitterContainer setAutoresizingMask:CPViewWidthSizable];	
+	[splitterContainer setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];	
 	[aView addSubview:splitterContainer];
 	
-	[self createSplitter:splitterContainer];
+	[self renderSearchContainerControls:searchFieldContainer];
+	[self createSplitterContainerControls:splitterContainer];
 }
 
-- (void)createSplitter:(CPView)aView
+- (void)renderSearchContainerControls:(CPView)aView
+{
+	searchField = [[CPSearchField alloc] initWithFrame:CPMakeRect(CGRectGetWidth([aView bounds]) - 195,2,190,30)];       
+    [searchField setRecentsAutosaveName:"autosave"];
+    [searchField setTarget:self];
+    [searchField setAction:@selector(updateFilter:)];
+	[searchField setPlaceholderString:@"type to search"];
+    [searchField setAutoresizingMask:CPViewMinXMargin | CPViewMinYMargin];
+	
+	[aView addSubview:searchField];
+}
+
+- (void)createSplitterContainerControls:(CPView)aView
 {
 	verticalSplitter = [[CPSplitView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth([aView bounds]), CGRectGetHeight([aView bounds]))];
 	[verticalSplitter setDelegate:self];
@@ -71,7 +84,7 @@ tableTestDragType = @"CPTableViewTestDragType";
 	[aView addSubview:verticalSplitter];
 	
 	var leftView = [[CPView alloc] initWithFrame:CGRectMake(0, 0, 200, CGRectGetHeight([verticalSplitter bounds]))];
-	[leftView setAutoresizingMask:CPViewHeightSizable ]; 
+	[leftView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable ]; 
 	var rightView = [[CPView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth([verticalSplitter bounds]) - 200, CGRectGetHeight([verticalSplitter bounds]))];
 	[rightView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable ]; 
 
@@ -85,15 +98,6 @@ tableTestDragType = @"CPTableViewTestDragType";
 - (void)renderLeftView:(CPView)aView
 {
 
-	searchField = [[CPSearchField alloc] initWithFrame:CPMakeRect(2,2,190,30)];       
-    [searchField setRecentsAutosaveName:"autosave"];
-    [searchField setTarget:self];
-    [searchField setAction:@selector(updateFilter:)];
-	[searchField setPlaceholderString:@"type to search"];
-    [searchField setAutoresizingMask:CPViewWidthSizable];
-	
-	//[searchFieldContainer addSubview:searchField];
-	
 	// Table View
 	dataSet1 = []
     
@@ -113,6 +117,7 @@ tableTestDragType = @"CPTableViewTestDragType";
     [tableView setDraggingDestinationFeedbackStyle:CPTableViewDropOn];
     [tableView registerForDraggedTypes:[CPArray arrayWithObject:tableTestDragType]];
     [tableView setColumnAutoresizingStyle:CPTableViewLastColumnOnlyAutoresizingStyle];
+	[tableView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable ]; 
     [tableView setDelegate:self];
     [tableView setDataSource:self];
     
@@ -138,21 +143,6 @@ tableTestDragType = @"CPTableViewTestDragType";
 	[nameColumn setEditable:YES];
 	[tableView addTableColumn:nameColumn];
 	
-	/*
-    for (var i = 1; i <= 2; i++)
-    {
-        var column = [[CPTableColumn alloc] initWithIdentifier:String(i)];
-        [column setSortDescriptorPrototype:desc];
-        [[column headerView] setStringValue:"Number " + i];
-
-        [column setMinWidth:10.0];
-        [column setMaxWidth:110.0];
-        [column setWidth:100.0];
-        
-        [column setEditable:YES];
-        [tableView addTableColumn:column];
-    }
-	*/
     var scrollView = [[CPScrollView alloc] initWithFrame:CGRectMake(2, 2, CGRectGetWidth([aView bounds]), CGRectGetHeight([aView bounds]))];
    [scrollView setDocumentView:tableView];
     [scrollView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
@@ -161,6 +151,7 @@ tableTestDragType = @"CPTableViewTestDragType";
 	
     //[_theWindow orderFront:self];
 }
+
 
 - (void)updateFilter:(CPString)aString
 {
