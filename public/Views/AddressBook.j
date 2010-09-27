@@ -1,17 +1,22 @@
 @import "WindowBase.j";
 @import "../Models/Contact.j";
 
-tableTestDragType = @"CPTableViewTestDragType";
+var tableTestDragType = @"CPTableViewTestDragType";
+var CreateContactToolbarItemIdentifier = 'AddContactToolbarItemIdentifier',
+	      EditContactToolbarItemIdentifier = 'EditContactToolbarItemIdentifier',
+		  RemoveContactToolbarItemIdentifer = 'RemoveContactToolbarItemIdentifier',
+		  SearchContactToolbarItemIdentifier = 'SearchContactToolbarItemIdentifier';
 
 @implementation AddressBook : WindowBase
 {
-	CPSearchField       searchField;
-	CPTableView 	    tableView;
-    CPImage     		iconImage;
-    CPArray     		dataSet1;    
-	CPSplitView 	    verticalSplitter;	
-	CPView				searchFieldContainer;
-	CPView				splitterContainer;
+    CPToolbar				toolbar;
+	CPSearchField        searchField;
+	CPTableView 	       tableView;
+    CPImage     		       iconImage;
+    CPArray     		       dataSet1;    
+	CPSplitView 	       verticalSplitter;	
+	CPView				       searchFieldContainer;
+	CPView				       splitterContainer;	
 }
 
 - (id)initWithContentView:(CPView)aView
@@ -36,9 +41,65 @@ tableTestDragType = @"CPTableViewTestDragType";
 		[self loadContacts:@""];
 		
 		// Create Splitter View
+		[self createToolbar];
 		[self createLayout:_theContentView];
 	}	
 	return self;	
+}
+
+- (void)createToolbar
+{
+	toolbar = [[CPToolbar alloc] initWithIdentifier:"Photos"];
+	[toolbar setDelegate:self];
+	[toolbar setVisible:YES];
+	[_theWindow setToolbar:toolbar];
+}
+
+// Return an array of toolbar item identifier (all the toolbar items that may be present in the toolbar)
+- (CPArray)toolbarAllowedItemIdentifiers:(CPToolbar)aToolbar
+{
+   return [CreateContactToolbarItemIdentifier, EditContactToolbarItemIdentifier, RemoveContactToolbarItemIdentifer, 
+             CPToolbarFlexibleSpaceItemIdentifier, SearchContactToolbarItemIdentifier];
+}
+
+// Return an array of toolbar item identifier (the default toolbar items that are present in the toolbar)
+- (CPArray)toolbarDefaultItemIdentifiers:(CPToolbar)aToolbar
+{
+   return [CreateContactToolbarItemIdentifier, EditContactToolbarItemIdentifier, RemoveContactToolbarItemIdentifer, 
+             CPToolbarFlexibleSpaceItemIdentifier, SearchContactToolbarItemIdentifier];
+}
+
+- (CPToolbarItem)toolbar:(CPToolbar)aToolbar itemForItemIdentifier:(CPString)anItemIdentifier willBeInsertedIntoToolbar:(BOOL)aFlag
+{
+    var toolbarItem = [[CPToolbarItem alloc] initWithItemIdentifier:anItemIdentifier];
+
+    if (anItemIdentifier == SearchContactToolbarItemIdentifier)
+    {
+		searchField = [[CPSearchField alloc] initWithFrame:CPMakeRect(300,2,190,30)];       
+        [searchField setRecentsAutosaveName:"autosave"];
+        [searchField setTarget:self];
+        [searchField setAction:@selector(updateFilter:)];
+	    [searchField setPlaceholderString:@"type to search"];
+        [searchField setAutoresizingMask:CPViewMinXMargin | CPViewMinYMargin | CPViewWidthSizable | CPViewHeightSizable ];
+		
+		[toolbarItem setView:searchField];
+		[toolbarItem setMinSize:CGSizeMake(180, 32)];
+	    [toolbarItem setMaxSize:CGSizeMake(180, 32)]; 		
+    }
+	else if (anItemIdentifier == CreateContactToolbarItemIdentifier)
+	{
+	    var image = [[CPImage alloc] initWithContentsOfFile:@"/images/icons/Add.jpg" size:CGSizeMake(32.0, 32.0)],
+            alternateImage = [[CPImage alloc] initWithContentsOfFile:@"Resources/CappuccinoAlternate.png" size:CGSizeMake(32.0, 32.0)];
+        
+        [toolbarItem setLabel:@"Add Contact"];
+        [toolbarItem setImage:image];
+        [toolbarItem setAlternateImage:alternateImage];
+	}
+	else if (anItemIdentifier == RemoveContactToolbarItemIdentifer)
+    {
+    }
+    
+    return toolbarItem;
 }
 
 - (void) loadContacts:(CPString)aSearchCriteria
@@ -49,29 +110,11 @@ tableTestDragType = @"CPTableViewTestDragType";
 - (void)createLayout:(CPView)aView
 {
 	// Containers
-	searchFieldContainer = [[CPView alloc] initWithFrame:CPMakeRect(0,0,CGRectGetWidth([aView bounds]), 40)];
-	[searchFieldContainer setAutoresizingMask:CPViewWidthSizable];
-	[searchFieldContainer setBackgroundColor:[CPColor colorWithCalibratedRed:219.0/255.0 green:220.0/255.0 blue:220.0/255.0 alpha:0.7]];
-	[aView addSubview:searchFieldContainer];	
-	
-	splitterContainer = [[CPView alloc] initWithFrame:CPMakeRect(0,40,CGRectGetWidth([aView bounds]), CGRectGetHeight([aView bounds]) - 40)];
+	splitterContainer = [[CPView alloc] initWithFrame:CPMakeRect(0,0,CGRectGetWidth([aView bounds]), CGRectGetHeight([aView bounds]))];
 	[splitterContainer setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];	
 	[aView addSubview:splitterContainer];
 	
-	[self renderSearchContainerControls:searchFieldContainer];
 	[self createSplitterContainerControls:splitterContainer];
-}
-
-- (void)renderSearchContainerControls:(CPView)aView
-{
-	searchField = [[CPSearchField alloc] initWithFrame:CPMakeRect(CGRectGetWidth([aView bounds]) - 195,2,190,30)];       
-    [searchField setRecentsAutosaveName:"autosave"];
-    [searchField setTarget:self];
-    [searchField setAction:@selector(updateFilter:)];
-	[searchField setPlaceholderString:@"type to search"];
-    [searchField setAutoresizingMask:CPViewMinXMargin | CPViewMinYMargin];
-	
-	[aView addSubview:searchField];
 }
 
 - (void)createSplitterContainerControls:(CPView)aView
@@ -134,7 +177,7 @@ tableTestDragType = @"CPTableViewTestDragType";
 	 
 	 var nameColumn = [[CPTableColumn alloc] initWithIdentifier:@"Contact_Name"];
 	[nameColumn setSortDescriptorPrototype:desc];
-	[[nameColumn headerView] setStringValue:@"Contact Name"];
+	[[nameColumn headerView] setStringValue:@"Contacts"];
 
 	[nameColumn setMinWidth:10.0];
 	[nameColumn setMaxWidth:200.0];
