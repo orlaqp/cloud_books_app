@@ -1,5 +1,6 @@
 @import "WindowBase.j";
 @import "../Models/Contact.j";
+@import "../CustomControls/CustomCPToolbar.j"
 
 var tableTestDragType = @"CPTableViewTestDragType";
 var CreateContactToolbarItemIdentifier = 'AddContactToolbarItemIdentifier',
@@ -49,7 +50,8 @@ var CreateContactToolbarItemIdentifier = 'AddContactToolbarItemIdentifier',
 
 - (void)createToolbar
 {
-	toolbar = [[CPToolbar alloc] initWithIdentifier:"Photos"];
+	toolbar = [[CustomCPToolbar alloc] initWithIdentifier:"Photos"];
+	[toolbar setHeight:59];
 	[toolbar setDelegate:self];
 	[toolbar setVisible:YES];
 	[_theWindow setToolbar:toolbar];
@@ -75,7 +77,7 @@ var CreateContactToolbarItemIdentifier = 'AddContactToolbarItemIdentifier',
 
     if (anItemIdentifier == SearchContactToolbarItemIdentifier)
     {
-		searchField = [[CPSearchField alloc] initWithFrame:CPMakeRect(300,2,190,30)];       
+		searchField = [[CPSearchField alloc] initWithFrame:CPMakeRect(2,2,190,30)];       
         [searchField setRecentsAutosaveName:"autosave"];
         [searchField setTarget:self];
         [searchField setAction:@selector(updateFilter:)];
@@ -87,13 +89,28 @@ var CreateContactToolbarItemIdentifier = 'AddContactToolbarItemIdentifier',
 	    [toolbarItem setMaxSize:CGSizeMake(180, 32)]; 		
     }
 	else if (anItemIdentifier == CreateContactToolbarItemIdentifier)
-	{
-	    var image = [[CPImage alloc] initWithContentsOfFile:@"/images/icons/Add.jpg" size:CGSizeMake(32.0, 32.0)],
-            alternateImage = [[CPImage alloc] initWithContentsOfFile:@"Resources/CappuccinoAlternate.png" size:CGSizeMake(32.0, 32.0)];
-        
+	{	
+	    var image = [[CPImage alloc] initWithContentsOfFile:@"/Resources/icons/add_user.png" size:CGSizeMake(32.0, 32.0)],
+            alternateImage = [[CPImage alloc] initWithContentsOfFile:@"/Resources/icons/add_user.png" size:CGSizeMake(30.0, 30.0)];        
         [toolbarItem setLabel:@"Add Contact"];
         [toolbarItem setImage:image];
-        [toolbarItem setAlternateImage:alternateImage];
+        [toolbarItem setAlternateImage:alternateImage];	
+	}
+	else if (anItemIdentifier == EditContactToolbarItemIdentifier)
+	{	
+	    var image = [[CPImage alloc] initWithContentsOfFile:@"/Resources/icons/edit_user.png" size:CGSizeMake(32.0, 32.0)],
+            alternateImage = [[CPImage alloc] initWithContentsOfFile:@"/Resources/icons/edit_user.png" size:CGSizeMake(30.0, 30.0)];        
+        [toolbarItem setLabel:@"Edit Contact"];
+        [toolbarItem setImage:image];
+        [toolbarItem setAlternateImage:alternateImage];	
+	}
+	else if (anItemIdentifier == RemoveContactToolbarItemIdentifer)
+	{	
+	    var image = [[CPImage alloc] initWithContentsOfFile:@"/Resources/icons/remove_user.png" size:CGSizeMake(32.0, 32.0)],
+            alternateImage = [[CPImage alloc] initWithContentsOfFile:@"/Resources/icons/remove_user.png" size:CGSizeMake(30.0, 30.0)];        
+        [toolbarItem setLabel:@"Erase Contact"];
+        [toolbarItem setImage:image];
+        [toolbarItem setAlternateImage:alternateImage];	
 	}
 	else if (anItemIdentifier == RemoveContactToolbarItemIdentifer)
     {
