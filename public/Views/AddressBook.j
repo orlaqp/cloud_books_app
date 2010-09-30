@@ -1,6 +1,7 @@
 @import "WindowBase.j";
 @import "../Models/Contact.j";
-@import "../CustomControls/CustomCPToolbar.j"
+@import "ContactDetails.j";
+//@import "../CustomControls/CustomCPToolbar.j"
 
 var tableTestDragType = @"CPTableViewTestDragType";
 var CreateContactToolbarItemIdentifier = 'AddContactToolbarItemIdentifier',
@@ -50,8 +51,8 @@ var CreateContactToolbarItemIdentifier = 'AddContactToolbarItemIdentifier',
 
 - (void)createToolbar
 {
-	toolbar = [[CustomCPToolbar alloc] initWithIdentifier:"Photos"];
-	[toolbar setHeight:59];
+	toolbar = [[CPToolbar alloc] initWithIdentifier:"Photos"];
+	//[toolbar setHeight:59];
 	[toolbar setDelegate:self];
 	[toolbar setVisible:YES];
 	[_theWindow setToolbar:toolbar];
@@ -152,7 +153,14 @@ var CreateContactToolbarItemIdentifier = 'AddContactToolbarItemIdentifier',
 	[verticalSplitter addSubview:rightView];
 	
 	// Render left view
-	[self renderLeftView: leftView];
+	[self renderLeftView:leftView];
+	[self renderContactDetails:rightView];
+}
+
+- (void)renderContactDetails:(CPView)aView
+{
+	var contactDetails = [[ContactDetails alloc] initWithFrame:CGRectMake(0,0,CGRectGetWidth([aView bounds]), CGRectGetHeight([aView bounds]))];
+	[aView addSubview:contactDetails];
 }
 
 - (void)renderLeftView:(CPView)aView
