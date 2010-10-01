@@ -13,8 +13,14 @@
 	
 	if (self)
 	{
+		[self setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable ];
+		
+		var photoWidth = 120;
+		var photoHeight = 120;
+	
 		photo = [[CPImage alloc] initWithContentsOfFile:@"/Resources/icons/Enligne.png" size:CGSizeMake(50.0, 42.0)];
-		photoView = [[CPImageView alloc] initWithFrame:CGRectMake(10,10, 50, 42)];
+		photoView = [[CPImageView alloc] initWithFrame:CGRectMake(aFrame.size.width - photoWidth - 10,10, photoWidth, photoHeight)];
+		[photoView setAutoresizingMask:CPViewMinXMargin | CPViewMinYMargin ];
 		[photoView setImageScaling:CPScaleNone];
 		[photoView setImage:photo];
 		[photoView setBackgroundColor:[CPColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1.0]];
